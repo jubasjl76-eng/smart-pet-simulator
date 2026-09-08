@@ -1,0 +1,16 @@
+# A self-contained virtual kennel: Mosquitto + the simulator.
+#   docker compose run --rm sim --scenario feeder-jam
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    ports: ["1883:1883"]
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+
+  sim:
+    build: .
+    depends_on: [mosquitto]
+    environment:
+      MQTT_URL: mqtt://mosquitto:1883
+    entrypoint: ["node", "dist/cli.js"]
+    command: ["--scenario", "happy-path"]

@@ -1,0 +1,24 @@
+{
+  "name": "smart-pet-simulator",
+  "version": "0.1.0",
+  "description": "Virtual kennel — simulated Smart Pet devices on MQTT, plus scripted failure scenarios for QA/CI",
+  "type": "module",
+  "bin": { "smart-pet-sim": "dist/cli.js" },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "sim": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "mqtt": "^5.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.0.0"
+  }
+}
