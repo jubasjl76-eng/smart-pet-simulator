@@ -126,6 +126,22 @@ export class SimRunner {
     client.publish(topic, JSON.stringify(body), { qos, retain });
   }
 
+  /** The device roster this runner is playing (for the web panel). */
+  get deviceSpecs() {
+    return this.scenario.devices;
+  }
+
+  /** Inject or clear a fault on one device from outside the timeline (web panel). */
+  setFault(deviceId: string, fault: import('./device.js').FaultName, on: boolean): boolean {
+    const dev = this.devices.get(deviceId);
+    if (!dev) return false;
+    if (on) dev.injectFault(fault);
+    else dev.clearFault(fault);
+    const client = this.clients[this.scenario.devices.findIndex((s) => s.deviceId === deviceId)];
+    if (client?.connected) this.publishStatus(client, dev);
+    return true;
+  }
+
   stop(): void {
     this.timers.forEach((t) => clearTimeout(t));
     this.timers = [];
