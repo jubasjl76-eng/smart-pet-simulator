@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "Virtual kennel — simulated Smart Pet devices on MQTT, plus scripted failure scenarios for QA/CI",
   "type": "module",
-  "bin": { "smart-pet-sim": "dist/cli.js" },
+  "bin": {
+    "smart-pet-sim": "dist/cli.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/cli.ts",
@@ -14,7 +16,8 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "mqtt": "^5.10.0"
+    "mqtt": "^5.10.0",
+    "@jubasjl76-eng/mqtt-contract": "git+https://github.com/jubasjl76-eng/smart-pet-mqtt.git#mqtt-contract-v2.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
