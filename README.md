@@ -28,6 +28,20 @@ docker compose run --rm sim --scenario temp-spike
 Options: `--scenario <name>` · `--broker <url>` (or `$MQTT_URL`) · `--kennel <id>`
 · `--tick <ms>` · `--duration <ms>`.
 
+## Web panel
+
+A visual way to drive the same virtual devices instead of `mosquitto_pub`:
+
+```bash
+npm run web           # then open http://localhost:4100
+```
+
+It runs the happy-path roster (devices connect and answer commands) and serves a
+page with a command button per device, fault toggles (jam, offline, no_flow,
+stuck_door, drift_high, battery_drain), and a live colour-coded log of every
+message on `kennel/#`. Env: `MQTT_URL`, `WEB_PORT` (4100), `SIM_KENNEL`.
+Run this instead of `npm run sim` (both would fight over the same client ids).
+
 ## Devices
 
 Each is a deterministic state machine (`src/device.ts`, `src/devices/`):
