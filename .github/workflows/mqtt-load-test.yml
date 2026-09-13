@@ -43,10 +43,15 @@ jobs:
         env:
           MQTT_USERNAME: ${{ secrets.MQTT_USERNAME }}
           MQTT_PASSWORD: ${{ secrets.MQTT_PASSWORD }}
+          BROKER_URL: ${{ inputs.broker_url }}
+          DEVICE_COUNT: ${{ inputs.count }}
+          RAMP_MS: ${{ inputs.ramp_ms }}
+          DURATION_MS: ${{ inputs.duration_ms }}
+          MIN_CONNECT_RATE: ${{ inputs.min_connect_rate }}
         run: |
           npm run load -- \
-            --broker "${{ inputs.broker_url }}" \
-            --count "${{ inputs.count }}" \
-            --ramp "${{ inputs.ramp_ms }}" \
-            --duration "${{ inputs.duration_ms }}" \
-            --min-connect-rate "${{ inputs.min_connect_rate }}"
+            --broker "$BROKER_URL" \
+            --count "$DEVICE_COUNT" \
+            --ramp "$RAMP_MS" \
+            --duration "$DURATION_MS" \
+            --min-connect-rate "$MIN_CONNECT_RATE"
