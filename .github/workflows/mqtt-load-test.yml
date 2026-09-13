@@ -1,0 +1,57 @@
+name: mqtt-load-test
+
+# Manual only (hardening Phase 21, A12 #24) — this hits a real deployed
+# broker (staging by default), not something to run on every push. Pairs
+# with smart-pet-backend's k6 HTTP load test for the other half of A12 #24.
+
+on:
+  workflow_dispatch:
+    inputs:
+      broker_url:
+        description: 'MQTT broker URL, e.g. mqtt://mqtt-staging.smartpet.example:1883'
+        type: string
+        required: true
+      count:
+        description: 'Devices to simulate.'
+        type: string
+        default: '10000'
+      ramp_ms:
+        description: 'Spread connects over this window (ms).'
+        type: string
+        default: '120000'
+      duration_ms:
+        description: 'Total run time (ms), including the ramp.'
+        type: string
+        default: '600000'
+      min_connect_rate:
+        description: 'Fail the job if connected/requested falls below this.'
+        type: string
+        default: '0.99'
+
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Run MQTT load test
+        env:
+          MQTT_USERNAME: ${{ secrets.MQTT_USERNAME }}
+          MQTT_PASSWORD: ${{ secrets.MQTT_PASSWORD }}
+          BROKER_URL: ${{ inputs.broker_url }}
+          DEVICE_COUNT: ${{ inputs.count }}
+          RAMP_MS: ${{ inputs.ramp_ms }}
+          DURATION_MS: ${{ inputs.duration_ms }}
+          MIN_CONNECT_RATE: ${{ inputs.min_connect_rate }}
+        run: |
+          npm run load -- \
+            --broker "$BROKER_URL" \
+            --count "$DEVICE_COUNT" \
+            --ramp "$RAMP_MS" \
+            --duration "$DURATION_MS" \
+            --min-connect-rate "$MIN_CONNECT_RATE"

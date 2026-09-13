@@ -10,6 +10,7 @@
     "build": "tsc",
     "dev": "tsx src/cli.ts",
     "sim": "tsx src/cli.ts",
+    "load": "tsx src/cli.ts --load",
     "web": "tsx src/web.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
